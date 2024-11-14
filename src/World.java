@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,12 +7,12 @@ import java.util.List;
 
 public class World {
     private List<Aeroport> list = new ArrayList<>();
-
     public World(String fileName) {
         try{
             BufferedReader buf = new BufferedReader(new FileReader(fileName));
             String s = buf.readLine();
             while(s!=null){
+
                 s=s.replaceAll("\"","");
                 //Enleve les guillemets qui separent les champs de donnees GPS.
                 String[] fields =s.split(",");
@@ -23,8 +24,9 @@ public class World {
                     double longitude = parseDouble(fields[11]);
                     double latitude = parseDouble(fields[12]);
 
-                    Aeroport aeroport = new Aeroport(name, iataCode, country, latitude, longitude);
+                    Aeroport aeroport = new Aeroport(iataCode, name, country, latitude, longitude);
                     list.add(aeroport);
+                    System.out.println(list.get(list.size() - 1));
                 }
                 s = buf.readLine();
             }
@@ -44,9 +46,18 @@ public class World {
         return list;
     }
 
+    public Aeroport findNearest(double latitude, double longitude) {
+        Aeroport reference = new Aeroport("", "", "", latitude, longitude);
+        Aeroport nearest = null;
+        double minDistance = Double.MAX_VALUE;
 
-    public double calculDistance(Aeroport a){
-
-        return 0;
+        for (Aeroport aeroport : list) {
+            double distance = reference.distance(aeroport);
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearest = aeroport;
+            }
+        }
+        return nearest;
     }
 }

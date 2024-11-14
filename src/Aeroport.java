@@ -25,6 +25,14 @@ public class Aeroport {
         return longitude;
     }
 
+    public double distance(Aeroport a) {
+        double deltaLat = Math.toRadians(a.latitude - this.latitude);
+        double deltaLon = Math.toRadians(a.latitude - this.latitude);
+        double avgLat = Math.toRadians((a.latitude+this.latitude)/2);
+        return Math.pow(deltaLat,2) + Math.pow(deltaLon * Math.cos(avgLat), 2);
+    }
+
+
     @Override
     public String toString() {
         return "Aeroport{" +
