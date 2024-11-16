@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +12,7 @@ public class World {
             String s = buf.readLine();
             while(s!=null){
 
-                s=s.replaceAll("\"","");
+                s=s.replace("\"","");
                 //Enleve les guillemets qui separent les champs de donnees GPS.
                 String[] fields =s.split(",");
                 // Une bonne idee : placer un point d'arret ici pour du debuggage.
@@ -26,7 +25,7 @@ public class World {
 
                     Aeroport aeroport = new Aeroport(iataCode, name, country, latitude, longitude);
                     list.add(aeroport);
-                    System.out.println(list.get(list.size() - 1));
+                    //System.out.println(list.get(list.size() - 1));
                 }
                 s = buf.readLine();
             }
@@ -52,12 +51,22 @@ public class World {
         double minDistance = Double.MAX_VALUE;
 
         for (Aeroport aeroport : list) {
-            double distance = reference.distance(aeroport);
+            double distance = reference.calculDistance(aeroport);
             if (distance < minDistance) {
                 minDistance = distance;
                 nearest = aeroport;
             }
         }
         return nearest;
+    }
+
+
+    public Aeroport findByCode(String IATA){
+        for (Aeroport aeroport : list) {
+            if (aeroport.getIATA().equalsIgnoreCase(IATA)) {
+                return aeroport;
+            }
+        }
+        return null;
     }
 }

@@ -25,7 +25,7 @@ public class Aeroport {
         return longitude;
     }
 
-    public double distance(Aeroport a) {
+    public double calculDistance(Aeroport a) {
         double deltaLat = Math.toRadians(a.latitude - this.latitude);
         double deltaLon = Math.toRadians(a.latitude - this.latitude);
         double avgLat = Math.toRadians((a.latitude+this.latitude)/2);
