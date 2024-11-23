@@ -3,7 +3,7 @@ public class Main {
         World world = new World("data/airport-codes_no_comma.csv");
         Aeroport aeroport = new Aeroport("Paris Orly", "ORY", "France",48.716, 2.383); // Exemple avec des coordonnées fictives
         //Aeroport a = new Aeroport("Paris CDG", "CDG", "France",49.0097, 2.5479);
-        //ouble distance = aeroport.calculDistance(a);
+        //double distance = aeroport.calculDistance(a);
         //System.out.println("Distance : " + distance + " unités.");
 
         System.out.println("Found "+ world.getList().size()+" airports.");

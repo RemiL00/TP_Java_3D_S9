@@ -13,9 +13,7 @@ public class World {
             while(s!=null){
 
                 s=s.replace("\"","");
-                //Enleve les guillemets qui separent les champs de donnees GPS.
                 String[] fields =s.split(",");
-                // Une bonne idee : placer un point d'arret ici pour du debuggage.
                 if (fields[1].equals("large_airport")){
                     String name = fields[2];
                     String country = fields[5];
