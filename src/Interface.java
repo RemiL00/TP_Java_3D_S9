@@ -58,11 +58,11 @@ public class Interface extends Application {
                             double latitude=180*(0.5-click.getY());
                             System.out.println("x="+longitude+" y ="+latitude);
 
-                            Aeroport aeroport = world.findNearest(longitude,latitude);
+                            Aeroport aeroport = world.findNearest(latitude, longitude);
                             if (aeroport != null) {
-                                System.out.println(aeroport);
+                                System.out.println("Aéroport le plus proche : "+aeroport);
+                                earth.displayRedSphere(aeroport);
 
-                                //earth.displayRedSphere(aeroport);
                                 //ThreadScrapOnlineFlight tsolf = new ThreadScrapOnlineFlight(earth,a,w,listOfFlight);
                                 //tsolf.start();
                             } else {

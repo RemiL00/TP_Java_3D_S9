@@ -8,12 +8,11 @@ public class Main {
 
         System.out.println("Found "+ world.getList().size()+" airports.");
         Aeroport paris = world.findNearest(48.866,2.316);
-        world.findNearest(48.866,2.316);
         Aeroport cdg = world.findByCode("CDG");
-        double distance = aeroport.calculDistance(paris);
+        double distance = aeroport.calculDistance(48.866, 2.316, paris.getLatitude(), paris.getLongitude());
         System.out.println(paris);
         System.out.println(distance);
-        double distanceCDG = aeroport.calculDistance(cdg);
+        double distanceCDG = aeroport.calculDistance(48.866, 2.316, cdg.getLatitude(), cdg.getLongitude());
         System.out.println(cdg);
         System.out.println(distanceCDG);
     }

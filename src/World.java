@@ -44,18 +44,16 @@ public class World {
     }
 
     public Aeroport findNearest(double latitude, double longitude) {
-        Aeroport reference = new Aeroport("", "", "", latitude, longitude);
-        Aeroport nearest = null;
-        double minDistance = Double.MAX_VALUE;
+        Aeroport aeroport = list.get(0);
+        double d = aeroport.calculDistance(latitude, longitude, aeroport.getLatitude(), aeroport.getLongitude());
 
-        for (Aeroport aeroport : list) {
-            double distance = reference.calculDistance(aeroport);
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearest = aeroport;
+        for (Aeroport a : list){
+            if (aeroport.calculDistance(latitude, longitude, a.getLatitude(), a.getLongitude())<d){
+                aeroport=a;
+                d= aeroport.calculDistance(latitude, longitude, aeroport.getLatitude(), aeroport.getLongitude());
             }
         }
-        return nearest;
+        return aeroport;
     }
 
 
