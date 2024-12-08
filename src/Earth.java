@@ -13,7 +13,7 @@ public class Earth extends Group {
     public Earth(){
         sph = new Sphere(300);
         PhongMaterial material = new PhongMaterial();
-        Image earthTexture = new Image("file:C:/Users/Remi/Documents/PERSO/Cours ENSEA/3eme année/Java/TP_Java_3D_S9/data/earth_lights_4800.png");
+        Image earthTexture = new Image("file:C:\\Users\\remil\\IdeaProjects\\TP_Java_3D_S9\\data\\earth_lights_4800.png");
         material.setDiffuseMap(earthTexture);
         sph.setMaterial(material);
 
@@ -33,30 +33,49 @@ public class Earth extends Group {
         animationTimer.start();
     }
 
-    public Sphere createSphere (Aeroport a, Color color){
-        double R = 300;
-        double latitude = a.getLatitude();
-        double longitude = a.getLongitude();
-        double x = R * Math.cos(latitude) * Math.sin(longitude);
-        double y = -R * Math.sin(latitude);
-        double z = -R * Math.cos(latitude) * Math.cos(longitude);
-
-        Sphere sphere = new Sphere(2);
-
-        PhongMaterial material = new PhongMaterial(color);
-        sphere.setMaterial(material);
-
-        sphere.setTranslateX(x);
-        sphere.setTranslateY(y);
-        sphere.setTranslateZ(z);
-        System.out.println("X: "+x+" Y: "+y+" Z: "+z);
-
-        return sphere;
+    public Sphere createSphere(Aeroport a,Color color){
+        return createSphere(a.getLatitude(),a.getLongitude(),color);
     }
 
-    public void displayRedSphere(Aeroport a) {
-        Sphere redSphere = createSphere(a, Color.RED);
+    public Sphere createSphere(double latitude, double longitude,Color color){
+        PhongMaterial col = new PhongMaterial();
+        col.setSpecularColor(color);
+        col.setDiffuseColor(color);
+
+        Sphere coloredSphere = new Sphere(2);
+        coloredSphere.setMaterial(col);
+
+        coloredSphere.setTranslateZ(-sph.getRadius());
+
+        Rotate rPhi = new Rotate (-longitude,
+                -coloredSphere.getTranslateX(),-coloredSphere.getTranslateY(),
+                -coloredSphere.getTranslateZ(),Rotate.Y_AXIS);
+
+        coloredSphere.getTransforms().add(rPhi);
+        Rotate rTheta = new Rotate (-latitude*60.0/90.0,
+                -coloredSphere.getTranslateX(),-coloredSphere.getTranslateY(),
+                -coloredSphere.getTranslateZ(),Rotate.X_AXIS);
+        coloredSphere.getTransforms().add(rTheta);
+
+        return coloredSphere;
+    }
+    private Sphere redSphere;
+    public void displayRedSphere(Aeroport a){
+        redSphere=createSphere(a,Color.RED);
         this.getChildren().add(redSphere);
     }
+
+    public void displayYellowSphere(Aeroport a) {
+        if (a == null) {
+            System.out.println("Aéroport invalide pour la sphère jaune.");
+            return;
+        }
+
+        Sphere yellowSphere = createSphere(a, Color.YELLOW);
+        this.getChildren().add(yellowSphere);
+
+        System.out.println("Sphère jaune ajoutée pour l'aéroport : " + a.getIATA());
+    }
+
 
 }

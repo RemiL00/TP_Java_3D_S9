@@ -1,15 +1,18 @@
 import javafx.application.Application;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
-import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class Interface extends Application {
         @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,35 +51,38 @@ public class Interface extends Application {
             ihm.addEventHandler(MouseEvent.ANY, event -> {
                 if (event.getButton() == MouseButton.SECONDARY && event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                     PickResult pickResult = event.getPickResult();
-                    System.out.println("PickResult: " + pickResult);
                     if (pickResult.getIntersectedNode() != null) {
-                        System.out.println("Intersected Node: " + pickResult.getIntersectedNode());
-                        Point2D click = pickResult.getIntersectedTexCoord();
-                        if (click != null) {
-                            System.out.println("Intersected TexCoord: " + click);
-                            double longitude=360*(click.getX()-0.5);
-                            double latitude=180*(0.5-click.getY());
-                            System.out.println("x="+longitude+" y ="+latitude);
+                        Point2D texCoord = pickResult.getIntersectedTexCoord();
+                        if (texCoord != null) {
+                            double longitude = 360 * (texCoord.getX() - 0.5);
+                            double latitude = 180 * (0.5 - texCoord.getY());
 
-                            Aeroport aeroport = world.findNearest(latitude, longitude);
-                            if (aeroport != null) {
-                                System.out.println("Aéroport le plus proche : "+aeroport);
-                                earth.displayRedSphere(aeroport);
+                            System.out.println("Coordonnées cliquées : Latitude = " + latitude + ", Longitude = " + longitude);
 
-                                //ThreadScrapOnlineFlight tsolf = new ThreadScrapOnlineFlight(earth,a,w,listOfFlight);
-                                //tsolf.start();
+                            Aeroport nearestAeroport = world.findNearest(latitude, longitude);
+                            if (nearestAeroport != null) {
+                                System.out.println("Aéroport le plus proche : " + nearestAeroport);
+                                earth.displayRedSphere(nearestAeroport);
+
+                                String apiUrl = "http://api.aviationstack.com/v1/flights"
+                                        + "?access_key=9cb7d91fda05e27c1cd3ac65ad97407d"
+                                        + "&arr_iata=" + nearestAeroport.getIATA();
+
+                                // Exécuter la tâche HTTP dans un nouveau thread
+                                RequestHttp task = new RequestHttp(apiUrl, world, earth);
+                                Thread thread = new Thread(task);
+                                thread.start();
                             } else {
-                                System.out.println("Aucun aéroport trouvé à ces coordonnées.");
+                                System.out.println("Aucun aéroport trouvé.");
                             }
-                        } else {
-                            System.out.println("No texture coordinates available at the clicked position.");
+
                         }
-                    } else {
-                        System.out.println("No intersected node.");
                     }
                 }
             });
-    }
+
+
+        }
 
 
     public static void main(String[] args) {

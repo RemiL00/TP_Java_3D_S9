@@ -1,19 +1,12 @@
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+
 public class Main {
     public static void main(String[] args) {
-        World world = new World("data/airport-codes_no_comma.csv");
-        Aeroport aeroport = new Aeroport("Paris Orly", "ORY", "France",48.716, 2.383); // Exemple avec des coordonnées fictives
-        //Aeroport a = new Aeroport("Paris CDG", "CDG", "France",49.0097, 2.5479);
-        //double distance = aeroport.calculDistance(a);
-        //System.out.println("Distance : " + distance + " unités.");
 
-        System.out.println("Found "+ world.getList().size()+" airports.");
-        Aeroport paris = world.findNearest(48.866,2.316);
-        Aeroport cdg = world.findByCode("CDG");
-        double distance = aeroport.calculDistance(48.866, 2.316, paris.getLatitude(), paris.getLongitude());
-        System.out.println(paris);
-        System.out.println(distance);
-        double distanceCDG = aeroport.calculDistance(48.866, 2.316, cdg.getLatitude(), cdg.getLongitude());
-        System.out.println(cdg);
-        System.out.println(distanceCDG);
     }
 }
